@@ -60,7 +60,21 @@ También podríamos, en lugar de decirle al ave que colisiona, enviarles mensaje
 
 ## Conocer los objetos que tengo en una posición determinada (por ejemplo, en la posición en la que se encuentra el jugador, o en la casilla adyacente a la derecha al jugador)
 
-Es útil conocer objetos en una posición determinada. Me sirve para saber si el objeto que tengo enfrente lo puedo atravesar o no, si puedo interactuar con él, 
+Es útil conocer objetos en una posición determinada. Me sirve para saber si el objeto que tengo enfrente lo puedo atravesar o no, si puedo interactuar con él, cómo interactúo con él según el objeto que tengo debajo, etc.
+
+Existen tres formas de conocer los objetos en una posición. El primero es usando el método <code>posicion.allElements()</code> que me devuelve una lista con todos los objetos que existen en una posición determinada. Vale decir que cualquier posición entiende este mensaje, así que podría hacer <code>game.at(12,9).allElements()</code>, <code>jugador.position().allElements()</code> (si se la definí), <code>game.origin().allElements()</code>, etc. 
+
+El segundo es utilizando el método <code>game.colliders(unObjeto)</code>, que denota una lista con todos los objetos que colisionan con el objeto que le pasamos como parámetro (osea, los objetos que estén en la misma posición). 
+
+Por ejemplo, dentro del objeto que representa al jugador, quiero un método que me diga los objetos con los que estoy colisionando ahora mismo. Podría construirlo de la siguiente forma:
+
+<code>object Jugador {
+
+  method objetosDebajoDeMi() {
+    return game.colliders(self)
+  }
+  
+}</code>
 
 * colliders, getObjectsIn, position.allElements()
 
