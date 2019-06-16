@@ -41,9 +41,9 @@ Dos objetos colisionan si tienen la misma posición. Existe un método que ejecu
 
 <strong>Disclaimer:</strong> En el ejemplo de arriba, se ejecuta cada vez que pepita colisiona con algún objeto. Tendría sentido si en el tablero los únicos objetos que tengo fueran Pepita y comidas que puedan ser consumidas por Pepita. Si tuviera, por ejemplo, otras aves en el tablero, y a Pepita se le permite colisionar con dichas aves, se las va a intentar comer :scream: :scream: :scream:
 
-En el bloque de código definimos <code<comida</code> como un parámetro que recibe el bloque, pero en realidad, puede ser cualquier objeto. Nosotros, en el momento, decidimos elegir la palabra comida para que quede más legible, pero wollokGame no sabe que los objetos son comida. Una descripción más literal del ejemplo (pero menos descriptiva) sería:
+En el bloque de código definimos <code>comida</code> como un parámetro que recibe el bloque, pero en realidad, puede ser cualquier objeto. Nosotros, en el momento, decidimos elegir la palabra comida para que quede más legible, pero wollokGame no sabe que los objetos son comida. Una descripción más literal del ejemplo (pero menos descriptiva) sería:
 
-<code>game.whenCollideDo(pepita, { unObjeto => pepita.comer(unObjeto) })</code> - Puede pasar que justo, el objeto con el que pepita colisiona, es otra ave.
+<code>game.whenCollideDo(pepita, { unObjeto => pepita.comer(unObjeto) })</code> - Puede pasar que justo, el objeto con el que pepita colisiona, es otra ave. O algún muro. O alguna persona.
 
 Una solución es, si sabemos que Pepita es el único objeto que se mueve por el tablero (la mueve el jugador), en lugar de consultar si Pepita colisiona con cualquier objeto (que podría ser comida o no), verificamos si la comida colisiona con cualquier objeto (que en este caso, el único objeto que podría llegar a colisionar, es Pepita).
 
