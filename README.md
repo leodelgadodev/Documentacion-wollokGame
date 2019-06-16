@@ -64,34 +64,100 @@ Es útil conocer objetos en una posición determinada. Me sirve para saber si el
 
 Existen tres formas de conocer los objetos en una posición. El primero es usando el método <code>posicion.allElements()</code> que me devuelve una lista con todos los objetos que existen en una posición determinada. Vale decir que cualquier posición entiende este mensaje, así que podría hacer <code>game.at(12,9).allElements()</code>, <code>jugador.position().allElements()</code> (si se la definí), <code>game.origin().allElements()</code>, etc. 
 
-El segundo es utilizando el método <code>game.colliders(unObjeto)</code>, que denota una lista con todos los objetos que colisionan con el objeto que le pasamos como parámetro (osea, los objetos que estén en la misma posición). 
+El segundo es usando el método <code>game.getObjectsIn(posición)</code>, que funciona exactamente igual al anterior.
+
+El tercero es utilizando el método <code>game.colliders(unObjeto)</code>, que denota una lista con todos los objetos que colisionan con el objeto que le pasamos como parámetro (osea, los objetos que estén en la misma posición). 
 
 Por ejemplo, dentro del objeto que representa al jugador, quiero un método que me diga los objetos con los que estoy colisionando ahora mismo. Podría construirlo de la siguiente forma:
 
-<code>object Jugador {
+object jugador {
 
   method objetosDebajoDeMi() {
     return game.colliders(self)
-  }
-  
-}</code>
+  } 
+}
 
-* colliders, getObjectsIn, position.allElements()
+
+
 
 ## Hacer que un objeto no pueda ser colisionado por el jugador
 
-Recordemos que una colisión es cuando dos objetos tienen la misma posición. 
+Este problema tiene muchas soluciones posibles. A continuación se muestra una de ellas.
 
-* onTick, removeTickEvent
+Supongamos que queremos contener al jugador dentro del tablero usando muros que no puedan ser atravesados y que el jugador sólo puede moverse un casillero hacia arriba, abajo, a la izquierda o a la derecha. Existiría un objeto que representa al jugador y otro objeto o clase que representa los muros.
+
+Bastaría con hacer que, cada vez que se intente mover, compruebe si el objeto que tiene delante lo puede pasar por encima. Esto se consigue utilizando <code>getObjectsIn()</code> o <code>allElements()</code> para comprobar el objeto que tenga delante y preguntar si puede colisionar con él o no.
+
+La cuestión es, ¿cómo puedo saber en qué dirección "estoy mirando"? No le puedo pasar todas las 4 direcciones posibles del jugador, porque no estoy intentando moverme en las cuatro direcciones y no debería evaluar todas ellas, estoy intentando moverme en una sola.
+
+Hay dos soluciones: o cuando intento moverme compruebo en cuál de las cuatro direcciones estoy intentando moverme, y evaluar acorde a esa dirección, o le paso alguna orientación como parámetro en el momento en que intenta moverse, y evalúo a partir de ahí. Como la segunda resulta útil por si después quisiera cambiar la imagen del personaje según la dirección en la que está mirando, vamos a explorar esa.
+
+object jugador {
+
+
+  method position() = game.at(4,8)
+  method image() = "jugador.png"
+  
+  method mover( posicion, unaOrientacion ) { 
+    if( self.puedeMoverAl( unaOrientacion ) { 
+      ..etc..
+    } else {
+        ..no se mueve.. 
+        }
+}
+
+object muro {
+  method image() = "muro.png"
+  method esColisionable() = false
+}
+
+¿De dónde sale "unaOrientación" y por dónde se la puedo pasar? La obtengo de los métodos que uso para mover el personaje, dentro del programa .wpgm:
+
+keyboard.up().onPressDo { personaje.mover(personaje.position().up(1),arriba) }
+keyboard.down().onPressDo { personaje.mover(personaje.position().down(1),abajo) }
+keyboard.left().onPressDo { personaje.mover(personaje.position().left(1),izquierda) }
+keyboard.right().onPressDo { personaje.mover(personaje.position().right(1),derecha) }
+
+Esta orientación también podría representarse con strings, pero elegí representarla con objetos para poder consultar las direcciones en las que se puede mover mediante polimorfismo.
+
+Para implementar el método <code>puedeMoverAl</code> se encuentran disponibles los métodos para verificar los objetos en una posición, <code>allElements()</code> y <code>getObjectsIn()</code>. Bastaría con enviarle un mensaje preguntándole a él o los objetos si los puedo pasar por encima (osea, <code>esColisionable()</code>).
+
+También, para simplificar un poco el código, me puedo guardar un método dentro de la orientación que me devuelvan la posición de la celda adyacente al jugador.
+
+method puedeMoverAl( unaOrientacion ) {
+  return game.getObjectsIn( unaOrientacion.posicionEnEsaDireccion() ).all { unObj => unObj.esColisionable() }
+}
+
+
+
+
+## Hacer que el personaje cambie de imagen según la orientación en la que se intenta mover
 
 * Animacion del personaje (que cambie su orientacion)
 
+## Animaciones (onTick)
+
+* onTick, removeTickEvent
+
 * Animacion de objetos
 
-* Generar muros y modificar tamaño del "tablero"
+## Generar muros alrededor del tablero
 
-* Generar objetos aleatoriamente en el tablero
 
-* combinaciones de teclas (a lo Street Fighter)
+## Modificar el tamaño del "tablero"
 
-* Barra de status / menu interfaz
+
+
+## Generar objetos aleatoriamente en el tablero
+
+
+
+
+## Combinaciones de teclas (a lo Street Fighter)
+
+
+
+## Barra de status / menu interfaz
+
+Este problema tiene muchas soluciones posibles. A continuación se muestra una de ellas.
+
