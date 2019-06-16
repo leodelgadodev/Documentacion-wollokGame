@@ -92,8 +92,8 @@ La cuestión es, ¿cómo puedo saber en qué dirección "estoy mirando"? No le p
 
 Hay dos soluciones: o cuando intento moverme compruebo en cuál de las cuatro direcciones estoy intentando moverme, y evaluar acorde a esa dirección, o le paso alguna orientación como parámetro en el momento en que intenta moverse, y evalúo a partir de ahí. Como la segunda resulta útil por si después quisiera cambiar la imagen del personaje según la dirección en la que está mirando, vamos a explorar esa.
 
+```ruby
 object jugador {
-
 
   method position() = game.at(4,8)
   method image() = "jugador.png"
@@ -110,13 +110,16 @@ object muro {
   method image() = "muro.png"
   method esColisionable() = false
 }
+```
 
 ¿De dónde sale "unaOrientación" y por dónde se la puedo pasar? La obtengo de los métodos que uso para mover el personaje, dentro del programa .wpgm:
 
+```ruby
 keyboard.up().onPressDo { personaje.mover(personaje.position().up(1),arriba) }
 keyboard.down().onPressDo { personaje.mover(personaje.position().down(1),abajo) }
 keyboard.left().onPressDo { personaje.mover(personaje.position().left(1),izquierda) }
 keyboard.right().onPressDo { personaje.mover(personaje.position().right(1),derecha) }
+```
 
 Esta orientación también podría representarse con strings, pero elegí representarla con objetos para poder consultar las direcciones en las que se puede mover mediante polimorfismo.
 
@@ -124,10 +127,30 @@ Para implementar el método <code>puedeMoverAl</code> se encuentran disponibles 
 
 También, para simplificar un poco el código, me puedo guardar un método dentro de la orientación que me devuelvan la posición de la celda adyacente al jugador.
 
+```ruby
 method puedeMoverAl( unaOrientacion ) {
-  return game.getObjectsIn( unaOrientacion.posicionEnEsaDireccion() ).all { unObj => unObj.esColisionable() }
+  return 
+    game.getObjectsIn( unaOrientacion.posicionEnEsaDireccion() ).all { unObj => unObj.esColisionable() }
 }
 
+object arriba {
+  method posicionEnEsaDireccion() = jugador.position().up(1)
+}
+
+object abajo {
+  method posicionEnEsaDireccion() = jugador.position().down(1)
+}
+
+object izquierda {
+  method posicionEnEsaDireccion() = jugador.position().left(1)
+}
+
+object derecha {
+  method posicionEnEsaDireccion() = jugador.position().right(1)
+}
+```
+
+<strong>Disclaimer:</strong> para que esto funcione, todos los objetos del tablero que el jugador puede intentar colisionar deben entender el mensaje <code>esColisionable()</code>.
 
 
 
