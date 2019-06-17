@@ -1,3 +1,5 @@
+___
+
 # Documentacion-wollokGame (actualizado a la versión 1.7.6)
 
 
@@ -8,6 +10,8 @@ Esta guía pretende extender [la documentación ya existente de wollokGame](http
 
 
 Dentro del entorno también se incluye una documentación (en inglés) con todos los métodos disponibles. Para encontrarlo, basta con apretar <code>CTRL + Shift + F3</code> y en la ventana que sale buscar el archivo <code>game.wlk</code>.
+
+___
 
 ## Position
 
@@ -29,6 +33,7 @@ Puedo calcular la distancia entre dos posiciones usando el [teorema de Pitágora
 
 La implementación completa de la clase Position se encuentra disponible en el archivo game.wlk.
 
+___
 
 ## Colisiones
 
@@ -58,6 +63,8 @@ game.whenCollideDo(manzana, { unAve => manzana.colisionasteCon(unAve) })
 game.whenCollideDo(alpiste, { unAve => alpiste.colisionasteCon(unAve) }) 
 ```
 
+___
+
 ## Conocer los objetos que tengo en una posición determinada (por ejemplo, en la posición en la que se encuentra el jugador, o en la casilla adyacente a la derecha al jugador)
 
 Es útil conocer objetos en una posición determinada. Me sirve para saber si el objeto que tengo enfrente lo puedo atravesar o no, si puedo interactuar con él, cómo interactúo con él según el objeto que tengo debajo, etc.
@@ -79,6 +86,7 @@ object jugador {
 }
 ```
 
+___
 
 ## Hacer que un objeto no pueda ser colisionado por el jugador
 
@@ -153,6 +161,7 @@ object derecha {
 }
 ```
 
+___
 
 ## Hacer que el personaje cambie de imagen según la orientación en la que se intenta mover
 
@@ -209,6 +218,8 @@ object derecha {
 }
 ```
 
+___
+
 ## Animaciones y eventos en el tiempo (onTick)
 
 Existe una forma para ejecutar código después de una cierta cantidad de tiempo: el método <code>game.onTick(tiempo,"nombre", {..bloque de código..}</code>.
@@ -252,6 +263,7 @@ Usando otro <code>onTick</code> en conjunto con <code>removeTickEvent</code> pue
 
 <strong>Otro disclaimer:</strong> puedo usar <code>game.addVisual</code>, <code>game.removeVisual</code>, <code>game.removeTickEvent</code>, <code>game.height()</code>, y la mayoría de los mensajes que entiende el objeto game en cualquier archivo, pero el onTick sólo lo puedo usar dentro del programa .wpgm.
 
+___
 
 ## Generar muros alrededor del tablero
 
@@ -278,6 +290,7 @@ method generarMuros() {
 }
 ```
 
+___
 
 ## Sonidos
 
