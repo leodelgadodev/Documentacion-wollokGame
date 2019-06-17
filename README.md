@@ -44,16 +44,19 @@ En el bloque de código definimos <code>comida</code> como un parámetro que rec
 
 Una solución es, si sabemos que Pepita es el único objeto que se mueve por el tablero (la mueve el jugador), en lugar de consultar si Pepita colisiona con cualquier objeto (que podría ser comida o no), verificamos si la comida colisiona con cualquier objeto (que en este caso, el único objeto que podría llegar a colisionar, es Pepita).
 
-<code>game.whenCollideDo(manzana, { unAve => unAve.comer(manzana) })</code> 
+```ruby
+game.whenCollideDo(manzana, { unAve => unAve.comer(manzana) }) 
 
-<code>game.whenCollideDo(alpiste, { unAve => unAve.comer(alpiste) })</code> 
+game.whenCollideDo(alpiste, { unAve => unAve.comer(alpiste) })
+```
 
 También podríamos, en lugar de decirle al ave que colisiona, enviarles mensajes a las comidas para que evalúen según quién las colisionó:
 
-<code>game.whenCollideDo(manzana, { unAve => manzana.colisionasteCon(unAve) })</code> 
+```ruby
+game.whenCollideDo(manzana, { unAve => manzana.colisionasteCon(unAve) }) 
 
-<code>game.whenCollideDo(alpiste, { unAve => alpiste.colisionasteCon(unAve) })</code> 
-
+game.whenCollideDo(alpiste, { unAve => alpiste.colisionasteCon(unAve) }) 
+```
 
 ## Conocer los objetos que tengo en una posición determinada (por ejemplo, en la posición en la que se encuentra el jugador, o en la casilla adyacente a la derecha al jugador)
 
@@ -67,14 +70,14 @@ El tercero es utilizando el método <code>game.colliders(unObjeto)</code>, que d
 
 Por ejemplo, dentro del objeto que representa al jugador, quiero un método que me diga los objetos con los que estoy colisionando ahora mismo. Podría construirlo de la siguiente forma:
 
+```ruby
 object jugador {
 
   method objetosDebajoDeMi() {
     return game.colliders(self)
   } 
 }
-
-
+```
 
 
 ## Hacer que un objeto no pueda ser colisionado por el jugador
@@ -123,6 +126,8 @@ Esta orientación también podría representarse con strings, pero elegí repres
 
 Para implementar el método <code>puedeMoverAl</code> se encuentran disponibles los métodos para verificar los objetos en una posición, <code>allElements()</code> y <code>getObjectsIn()</code>. Bastaría con enviarle un mensaje preguntándole a él o los objetos si los puedo pasar por encima (osea, <code>esColisionable()</code>).
 
+<strong>Disclaimer:</strong> para que esto funcione, todos los objetos del tablero que el jugador pueda intentar colisionar deben entender el mensaje <code>esColisionable()</code>.
+
 También, para simplificar un poco el código, me puedo guardar un método dentro de la orientación que me devuelvan la posición de la celda adyacente al jugador.
 
 ```ruby
@@ -148,9 +153,6 @@ object derecha {
 }
 ```
 
-<strong>Disclaimer:</strong> para que esto funcione, todos los objetos del tablero que el jugador puede intentar colisionar deben entender el mensaje <code>esColisionable()</code>.
-
-
 
 ## Hacer que el personaje cambie de imagen según la orientación en la que se intenta mover
 
@@ -162,7 +164,7 @@ Basta con extender la implementación para que el jugador se guarde su orientaci
 object jugador {
   
   var orientacion = derecha //debemos inicializarla con la orientación a la que empieza viendo el jugador.
-                            // Podría resolverse sin guardar la orientación en una variable, 
+                            //podría resolverse sin guardar la orientación en una variable, 
 			    //y pasándole la orientación como parámetro al método actualizarImagen().
 
   method position() = game.at(4,8)
@@ -263,8 +265,8 @@ Una vez completa la colección de posiciones, podemos generar todos los muros.
 
 ```ruby
 method generarMuros() {
-   const ancho = game.width() - 1 // Debemos restarles uno para .
-   const alto = game.height() - 1 // que las posiciones se generen bien
+   const ancho = game.width() - 1 // debemos restarles uno para 
+   const alto = game.height() - 1 // que las posiciones se generen bien.
    const posicionesParaGenerarMuros = []
 		
    (0 .. ancho).forEach{ num => posicionesParaGenerarMuros.add(new Position(num, alto))} // lado superior
