@@ -29,9 +29,6 @@ Puedo calcular la distancia entre dos posiciones usando el [teorema de Pitágora
 
 La implementación completa de la clase Position se encuentra disponible en el archivo game.wlk.
 
-## Sonidos
-
-WIP.
 
 ## Colisiones
 
@@ -104,6 +101,7 @@ object jugador {
     } else {
         ..no se mueve.. 
         }
+  }
 }
 
 object muro {
@@ -115,10 +113,10 @@ object muro {
 ¿De dónde sale "unaOrientación" y por dónde se la puedo pasar? La obtengo de los métodos que uso para mover el personaje, dentro del programa .wpgm:
 
 ```ruby
-keyboard.up().onPressDo { personaje.mover(personaje.position().up(1),arriba) }
-keyboard.down().onPressDo { personaje.mover(personaje.position().down(1),abajo) }
-keyboard.left().onPressDo { personaje.mover(personaje.position().left(1),izquierda) }
-keyboard.right().onPressDo { personaje.mover(personaje.position().right(1),derecha) }
+  keyboard.up().onPressDo { personaje.mover(personaje.position().up(1),arriba) }
+  keyboard.down().onPressDo { personaje.mover(personaje.position().down(1),abajo) }
+  keyboard.left().onPressDo { personaje.mover(personaje.position().left(1),izquierda) }
+  keyboard.right().onPressDo { personaje.mover(personaje.position().right(1),derecha) }
 ```
 
 Esta orientación también podría representarse con strings, pero elegí representarla con objetos para poder consultar las direcciones en las que se puede mover mediante polimorfismo.
@@ -156,31 +154,130 @@ object derecha {
 
 ## Hacer que el personaje cambie de imagen según la orientación en la que se intenta mover
 
-* Animacion del personaje (que cambie su orientacion)
+Aprovecharemos el código de la sección anterior para poder resolver esto.
 
-## Animaciones (onTick)
+Basta con extender la implementación para que el jugador se guarde su orientación, dentro de cada orientación nos guardemos la imagen correspondiente al jugador, e incluir un método para que actualice su imagen cada vez que se intente mover.
 
-* onTick, removeTickEvent
+```ruby
+object jugador {
+  
+  var orientacion = derecha //debemos inicializarla con la orientación a la que empieza viendo el jugador.
+                            //Podría resolverse sin guardar la orientación en una variable, y pasándole la orientación
+                            //como parámetro al método actualizarImagen().
 
-* Animacion de objetos
+  method position() = game.at(4,8)
+  method image() = orientacion.imagenDelJugador()
+  
+  method mover( posicion, unaOrientacion ) { 
+    
+    orientacion = unaOrientacion 
+    self.actualizarImagen() 
+    
+    if( self.puedeMoverAl( unaOrientacion ) { 
+      ..etc..
+    } else {
+        ..no se mueve.. 
+        }
+  }
+  
+  method actualizarImagen() {
+    imagen = orientacion.imagenDelJugador()
+		game.addVisual(self)
+  }
+}
+
+object arriba {
+  method imagenDelJugador() = "jugador-up.png"
+  method posicionEnEsaDireccion() = jugador.position().up(1)
+}
+
+object abajo {
+  method imagenDelJugador() = "jugador-down.png"
+  method posicionEnEsaDireccion() = jugador.position().down(1)
+}
+
+object izquierda {
+  method imagenDelJugador() = "jugador-left.png"
+  method posicionEnEsaDireccion() = jugador.position().left(1)
+}
+
+object derecha {
+  method imagenDelJugador() = "jugador-right.png"
+  method posicionEnEsaDireccion() = jugador.position().right(1)
+}
+```
+
+## Animaciones y eventos en el tiempo (onTick)
+
+Existe una forma para ejecutar código después de una cierta cantidad de tiempo: el método <code>game.onTick(tiempo,"nombre", {..bloque de código..}</code>.
+
+El tiempo se expresa en milisegundos (un segundo son 1000, 60 segundos son 60000, etc).
+
+Con él se puede crear un cronómetro, generar enemigos cada cierto tiempo, hacer que se muevan cada cierto tiempo, o cambiar la imagen de los objetos cada cierto tiempo (osea, animaciones!). Incluso puedo hacer que tengan una animación sólo por una cierta cantidad de tiempo y luego vuelva a quedar estático.
+
+Un ejemplo de una animación simple:
+
+```ruby
+object enemigo() {
+  var property image = "enemigo_1.png"
+
+  method bailar() {
+	  	if (image = "enemigo_1.png") {
+	  		image = "enemigo_2.png"
+	  	} else {
+	  		image = "enemigo_1.png"
+	  	}
+	}
+}
+```
+
+Y con esto, agregando <code>game.onTick(500,"enemigo bailando",{enemigo.bailar()})</code> en el programa .wpgm, ya tiene una animación.
+
+<strong>Disclaimer:</strong> remover el objeto <strong>NO</strong> remueve el onTick correspondiente (aunque no tira ningún error si borramos el objeto). Para remover el onTick se puede utilizar el método <code>game.removeTickEvent("nombre")</code>. Podemos decir, por ejemplo, que cuando aprete cualquier tecla la animación del enemigo se detenga.
+
+```ruby
+  keyboard.any.onPressDo {game.removeTickEvent("enemigo bailando")}
+```
+
+Usando otro <code>onTick</code> en conjunto con <code>removeTickEvent</code> puedo decirle que sólo baile durante ocho segundos:
+
+```ruby
+  game.onTick(8000,"remover baile enemigo", {
+    game.removeTickEvent("enemigo bailando")
+    game.removeTickEvent("remover baile enemigo")
+  })
+```
+
+<strong>Otro disclaimer:</strong> puedo usar <code>game.addVisual</code>, <code>game.removeVisual</code>, <code>game.removeTickEvent</code>, <code>game.height()</code>, y la mayoría de los mensajes que entiende el objeto game en cualquier archivo, pero el onTick sólo lo puedo usar dentro del programa .wpgm.
+
 
 ## Generar muros alrededor del tablero
 
-
-## Modificar el tamaño del "tablero"
-
-
-
-## Generar objetos aleatoriamente en el tablero
-
-
-
-
-## Combinaciones de teclas (a lo Street Fighter)
-
-
-
-## Barra de status / menu interfaz
-
 Este problema tiene muchas soluciones posibles. A continuación se muestra una de ellas.
+
+Suponiendo que tengo un objeto muro con su visual correspondiente, puedo crear un método que me genere bordes en el tablero a partir de una colección de posiciones. Esta colección de posiciones la puedo generar utilizando un <code>forEach</code> por cada lado del tablero, intentando abarcar sus lados que van desde el origen hasta su posición más alta, desde el origen hasta su posición más ancha, desde su posición más ancha hasta su posición más alta y desde su posición más alta y ancha (el extremo opuesto a (0,0)) hasta sólo su posición más alta.
+
+Para obtener todos estos puntos, podemos usar los métodos <code>game.width()</code> y <code>game.height()</code> que nos dicen el ancho y el alto del tablero, y enviarles rangos a todos los <code>forEach</code> para generar las posiciones una por una.
+
+Una vez completa la colección de posiciones, podemos generar todos los muros.
+
+```ruby
+method generarMuros() {
+		const ancho = game.width() - 1 //Debemos restarles uno para que las posiciones se generen bien.
+		const alto = game.height() - 1
+		const posicionesParaGenerarMuros = []
+		
+		(0 .. ancho).forEach{ num => posicionesParaGenerarMuros.add(new Position(num, alto))} // muros del lado superior
+		(0 .. alto).forEach{ num => posicionesParaGenerarMuros.add(new Position(ancho, num))} // muros del lado derecho
+		(0 .. ancho).forEach{ num => posicionesParaGenerarMuros.add(new Position(num, 0))} 	// muros del lado inferior
+		(0 .. alto).forEach{ num => posicionesParaGenerarMuros.add(new Position(0, num))}		// muros del lado izquierdo
+    
+		posicionesParaGenerarMuros.forEach {posicion => game.addVisualIn(self,posicion)}
+	}
+```
+
+
+## Sonidos
+
+WIP.
 
