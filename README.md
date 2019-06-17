@@ -162,8 +162,8 @@ Basta con extender la implementación para que el jugador se guarde su orientaci
 object jugador {
   
   var orientacion = derecha //debemos inicializarla con la orientación a la que empieza viendo el jugador.
-                            //Podría resolverse sin guardar la orientación en una variable, y pasándole la orientación
-                            //como parámetro al método actualizarImagen().
+                            //Podría resolverse sin guardar la orientación en una variable, 
+			    //y pasándole la orientación como parámetro al método actualizarImagen().
 
   method position() = game.at(4,8)
   method image() = orientacion.imagenDelJugador()
@@ -222,12 +222,12 @@ object enemigo() {
   var property image = "enemigo_1.png"
 
   method bailar() {
-	  	if (image = "enemigo_1.png") {
-	  		image = "enemigo_2.png"
-	  	} else {
-	  		image = "enemigo_1.png"
-	  	}
-	}
+      if (image = "enemigo_1.png") {
+	 image = "enemigo_2.png"
+	 } else {
+	   image = "enemigo_1.png"
+	 }
+  }
 }
 ```
 
@@ -263,17 +263,17 @@ Una vez completa la colección de posiciones, podemos generar todos los muros.
 
 ```ruby
 method generarMuros() {
-		const ancho = game.width() - 1 //Debemos restarles uno para que las posiciones se generen bien.
-		const alto = game.height() - 1
-		const posicionesParaGenerarMuros = []
+   const ancho = game.width() - 1 // Debemos restarles uno para .
+   const alto = game.height() - 1 // que las posiciones se generen bien
+   const posicionesParaGenerarMuros = []
 		
-		(0 .. ancho).forEach{ num => posicionesParaGenerarMuros.add(new Position(num, alto))} // muros del lado superior
-		(0 .. alto).forEach{ num => posicionesParaGenerarMuros.add(new Position(ancho, num))} // muros del lado derecho
-		(0 .. ancho).forEach{ num => posicionesParaGenerarMuros.add(new Position(num, 0))} 	// muros del lado inferior
-		(0 .. alto).forEach{ num => posicionesParaGenerarMuros.add(new Position(0, num))}		// muros del lado izquierdo
+   (0 .. ancho).forEach{ num => posicionesParaGenerarMuros.add(new Position(num, alto))} // lado superior
+   (0 .. ancho).forEach{ num => posicionesParaGenerarMuros.add(new Position(num, 0))} // lado inferior
+   (0 .. alto).forEach{ num => posicionesParaGenerarMuros.add(new Position(ancho, num))} // lado derecho
+   (0 .. alto).forEach{ num => posicionesParaGenerarMuros.add(new Position(0, num))} // lado izquierdo
     
-		posicionesParaGenerarMuros.forEach {posicion => game.addVisualIn(self,posicion)}
-	}
+   posicionesParaGenerarMuros.forEach {posicion => game.addVisualIn(self,posicion)}
+}
 ```
 
 
