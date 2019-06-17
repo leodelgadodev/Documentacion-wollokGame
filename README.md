@@ -162,7 +162,7 @@ Basta con extender la implementación para que el jugador se guarde su orientaci
 object jugador {
   
   var orientacion = derecha //debemos inicializarla con la orientación a la que empieza viendo el jugador.
-                            //Podría resolverse sin guardar la orientación en una variable, 
+                            // Podría resolverse sin guardar la orientación en una variable, 
 			    //y pasándole la orientación como parámetro al método actualizarImagen().
 
   method position() = game.at(4,8)
