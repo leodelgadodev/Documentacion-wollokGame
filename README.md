@@ -9,7 +9,7 @@ ___
 Esta guía pretende extender [la documentación ya existente de wollokGame](https://www.wollok.org/documentacion/conceptos/) y mostrar algunas cosas que se pueden hacer con él. Se recomienda leer esto después de ver la documentación oficial. <strong>Esta guía NO busca reemplazar las clases presenciales en las que se expliquen conceptos de las materias, ni enseñar sobre el paradigma de objetos ni sobre patrones de diseño.</strong> Vale decir que <strong>esta documentacion NO es oficial</strong>.
 
 
-Dentro del entorno también se incluye una documentación (en inglés) con todos los métodos disponibles. Para encontrarlo, basta con apretar <code>CTRL + Shift + F3</code> y en la ventana que sale buscar el archivo <code>game.wlk</code>.
+Dentro del entorno también se incluye una documentación (en inglés) y la implementación con todos los métodos disponibles. Para encontrarlo, basta con apretar <code>CTRL + Shift + F3</code> y en la ventana que sale buscar el archivo <code>game.wlk</code>.
 
 ___
 
