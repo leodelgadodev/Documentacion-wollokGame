@@ -117,7 +117,7 @@ object jugador {
 
 object muro {
   method image() = "muro.png"
-  method esColisionable() = false
+  method esAtravesable() = false
 }
 ```
 
@@ -132,16 +132,16 @@ object muro {
 
 Esta orientación también podría representarse con strings, pero elegí representarla con objetos para poder consultar las direcciones en las que se puede mover mediante polimorfismo.
 
-Para implementar el método <code>puedeMoverAl</code> se encuentran disponibles los métodos para verificar los objetos en una posición, <code>allElements()</code> y <code>getObjectsIn()</code>. Bastaría con enviarle un mensaje preguntándole a él o los objetos si los puedo pasar por encima (osea, <code>esColisionable()</code>).
+Para implementar el método <code>puedeMoverAl</code> se encuentran disponibles los métodos para verificar los objetos en una posición, <code>allElements()</code> y <code>getObjectsIn()</code>. Bastaría con enviarle un mensaje preguntándole a él o los objetos si los puedo pasar por encima (osea, <code>esAtravesable()</code>).
 
-<strong>Disclaimer:</strong> para que esto funcione, todos los objetos del tablero que el jugador pueda intentar colisionar deben entender el mensaje <code>esColisionable()</code>.
+<strong>Disclaimer:</strong> para que esto funcione, todos los objetos del tablero que el jugador pueda intentar colisionar deben entender el mensaje <code>esAtravesable()</code>.
 
 También, para simplificar un poco el código, me puedo guardar un método dentro de la orientación que me devuelvan la posición de la celda adyacente al jugador.
 
 ```ruby
 method puedeMoverAl( unaOrientacion ) {
   return 
-    game.getObjectsIn( unaOrientacion.posicionEnEsaDireccion() ).all { unObj => unObj.esColisionable() }
+    game.getObjectsIn( unaOrientacion.posicionEnEsaDireccion() ).all { unObj => unObj.esAtravesable() }
 }
 
 object arriba {
@@ -231,7 +231,7 @@ Con él se puede crear un cronómetro, generar enemigos cada cierto tiempo, hace
 Un ejemplo de una animación simple:
 
 ```ruby
-object enemigo() {
+object enemigo {
   var property image = "enemigo_1.png"
 
   method bailar() {
@@ -261,7 +261,14 @@ Usando otro <code>onTick</code> en conjunto con <code>removeTickEvent</code> pue
   })
 ```
 
-<strong>Otro disclaimer:</strong> puedo usar <code>game.addVisual</code>, <code>game.removeVisual</code>, <code>game.removeTickEvent</code>, <code>game.height()</code>, y la mayoría de los mensajes que entiende el objeto game en cualquier archivo, pero el onTick sólo lo puedo usar dentro del programa .wpgm.
+Como ven, también se puede agregar un <code>removeTickEvent</code> dentro de su <code>onTick</code>, haciendo que sólo ejecute una vez.
+
+```ruby
+  game.onTick(100,"bailar una sola vez", {
+    enemigo.bailar()
+    game.removeTickEvent("bailar una sola vez")
+  })
+
 
 ___
 
