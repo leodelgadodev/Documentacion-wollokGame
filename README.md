@@ -292,7 +292,25 @@ method generarMuros() {
 
 ___
 
-## Sonidos
+## Repeat
 
-WIP.
+Por el momento no existe ningún método repeat, pero se puede implementar uno de la siguiente forma:
+
+```ruby
+object repeat {
+	//uso : repeat.amount( numero, bloque de codigo )
+	//Repite el codigo n veces.
+	//PRECONDICION: No le puedo pasar números negativos como parametro (ej. repeat.cant(-1,{etc}) NO!)
+	method amount(n,bloque) {
+		var contador = n
+		
+		if (contador != 0) {
+			bloque.apply()
+			self.cant(contador-1,bloque)
+		}
+	}
+}
+```
+
+Se puede probar cargando el archivo con el objeto en la consola de wollok y escribiendo, por ejemplo, <code>repeat.amount(3,console.println("Soy un texto que aparece tres veces :D"))</code>.
 
