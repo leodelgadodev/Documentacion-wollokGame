@@ -300,7 +300,9 @@ Por el momento no existe ningún método repeat, pero se puede implementar uno d
 object repeat {
 	//uso : repeat.amount( numero, bloque de codigo )
 	//Repite el codigo n veces.
-	//PRECONDICION: No le puedo pasar números negativos como parametro (ej. repeat.cant(-1,{etc}) NO!)
+	//PRECONDICION: No le puedo pasar números negativos como parametro 
+	// (ej. repeat.amount(-1,{etc}) NO!)
+	
 	method amount(n,bloque) {
 		var contador = n
 		
