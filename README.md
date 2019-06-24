@@ -268,7 +268,7 @@ Como ven, también se puede agregar un <code>removeTickEvent</code> dentro de su
     enemigo.bailar()
     game.removeTickEvent("bailar una sola vez")
   })
-
+```
 
 ___
 
