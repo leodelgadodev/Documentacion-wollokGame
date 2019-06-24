@@ -315,7 +315,7 @@ object repeat {
 		
 		if (contador != 0) {
 			bloque.apply()
-			self.cant(contador-1,bloque)
+			self.amount(contador-1,bloque)
 		}
 	}
 }
